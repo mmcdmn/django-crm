@@ -8,11 +8,15 @@ class AdminRedirectMiddleware:
 
     def __call__(self, request):
         # Check if the request is for the admin site and the user is not a superuser
-        if settings.SECRET_ADMIN_PREFIX in request.path and not request.user.is_superuser:
-            # Remove the '/admin' prefix and redirect to the CRM site's URL
+        if (
+            settings.SECRET_ADMIN_PREFIX in request.path
+            and not request.user.is_superuser
+        ):
+            # Remove the '/badmin' prefix and redirect to the CRM site's URL
             new_path = request.path.replace(
-                settings.SECRET_ADMIN_PREFIX, settings.SECRET_CRM_PREFIX)
-            query_string = request.META.get('QUERY_STRING')
+                settings.SECRET_ADMIN_PREFIX, settings.SECRET_CRM_PREFIX
+            )
+            query_string = request.META.get("QUERY_STRING")
             if query_string:
                 new_path = f"{new_path}?{query_string}"
             return HttpResponseRedirect(new_path)
